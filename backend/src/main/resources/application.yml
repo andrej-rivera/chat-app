@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: chat
+
+  data:
+    db:
+      username: andre
+      password: pass
+      host: localhost
+      port: 27017
+      database: chatdb
+      authentication-database: admin
+
+  server:
+    port: 5432
