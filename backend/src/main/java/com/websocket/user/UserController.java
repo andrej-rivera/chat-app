@@ -33,6 +33,20 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
+    // Request a password reset (generates a token for user)
+    @PostMapping("/users/password/request")
+    public ResponseEntity<Void> requestPasswordReset(@RequestBody String email) {
+        service.requestPasswordReset(email);
+        return ResponseEntity.ok().build();
+    }
+
+    // Remove a user by username
+    @PostMapping("/users/password/change")
+    public ResponseEntity<Void> changeUserPassword(@RequestBody String email, @RequestBody String newPassword, @RequestBody String token) {
+        service.changeUserPassword(email, newPassword, token);
+        return ResponseEntity.noContent().build();
+    }
+
     // Login a user
     @MessageMapping("/user.addUser")
     @SendTo("/user/topic")

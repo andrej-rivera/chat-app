@@ -1,9 +1,14 @@
 package com.websocket.user;
 import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Base64;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.security.SecureRandom;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +36,64 @@ public class UserService {
         user.setFriends(new HashSet<>());
         user.setReceivingRequests(new HashSet<>());
         user.setSentRequests(new HashSet<>());
+        user.setTokens(new HashMap<>());
         return repository.save(user);
     }
 
+    
     // Remove a user by username
     public void removeUser(String username) {
         repository.deleteById(username);
+    }
+
+    // Request a password reset
+    public String requestPasswordReset(String email) {
+        var user = repository.findById(email).orElse(null);
+        if (user == null) {
+            throw new IllegalArgumentException("No such account exists");
+        }
+        
+        // Generate Token
+        SecureRandom secureRandom = new SecureRandom();
+        byte[] tokenBytes = new byte[32]; // 32 bytes for a strong token
+        secureRandom.nextBytes(tokenBytes);
+        String secureToken = Base64.getUrlEncoder().withoutPadding().encodeToString(tokenBytes);
+
+        // Set expiry date (e.g., 1 hour from now)
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, 1);
+        Date expiryDate = calendar.getTime();
+
+        // Create and store token
+        User.Token token = user.new Token(secureToken, expiryDate);
+        user.getTokens().put("passwordToken", token);
+        repository.save(user);
+
+        return secureToken;
+
+    }
+
+    // Change a user's password
+    public User changeUserPassword(String email, String newPassword, String token) {
+        // obtain user
+        var user = repository.findById(email).orElse(null);
+        if (user == null) {
+            throw new IllegalArgumentException("No such account exists");
+        }
+
+        // validate token
+        var storedToken = user.getTokens().get("passwordToken");
+        if (!token.equals(storedToken.tokenValue)) {
+            throw new IllegalArgumentException("Invalid token");
+        }
+        if (storedToken.expiryDate.after(new Date())) {
+            user.getTokens().remove("passwordToken"); // remove expired token
+            throw new IllegalArgumentException("Token has expired");
+        }
+
+        // encode password
+        user.setPassword(encoder.encode(newPassword));
+        return repository.save(user);    
     }
 
     // Connect user to service (login)
@@ -61,6 +118,15 @@ public class UserService {
             storedUser.setStatus(Status.OFFLINE);
             repository.save(storedUser);
         }
+    }
+
+    // Return a list of all users online
+    public User findByEmail(String email) {
+        var storedUser = repository.findById(email).orElse(null);
+        if (storedUser != null) {
+            return storedUser;
+        }
+        return null;
     }
 
     // Return a list of all users online
