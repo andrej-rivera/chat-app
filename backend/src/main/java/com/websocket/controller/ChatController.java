@@ -1,8 +1,10 @@
-package com.websocket.chat;
+package com.websocket.controller;
 
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
+import com.websocket.model.ChatMessage;
+import com.websocket.service.ChatMessageService;
+import com.websocket.model.ChatNotification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -19,8 +21,8 @@ public class ChatController {
     private final ChatMessageService service;
 
     @GetMapping("/chat/{senderId}/{receiverId}")
-    public ResponseEntity<List<ChatMessage>> findChatMessages(@PathVariable("senderId") String senderId,
-                                                               @PathVariable("receiverId") String receiverId) {
+    public ResponseEntity<List<ChatMessage>> findChatMessages(@PathVariable("senderId") Long senderId,
+                                                              @PathVariable("receiverId") Long receiverId) {
         return ResponseEntity.ok(service.findChatMessages(senderId, receiverId));
     }
     
@@ -36,7 +38,7 @@ public class ChatController {
             .content(savedMessage.getContent())
             .build();
 
-        messagingTemplate.convertAndSendToUser(message.getReceiverId(), "/queue/messages", notification);
+        messagingTemplate.convertAndSendToUser(String.valueOf(message.getReceiverId()), "/queue/messages", notification);
 
     }
 }

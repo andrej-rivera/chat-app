@@ -1,4 +1,4 @@
-package com.websocket.chat;
+package com.websocket.model;
 
 import java.util.Date;
 
@@ -17,13 +17,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "chat_message")
+@Table(name = "chatmessages")
 public class ChatMessage {
     @Id
-    private String id;
+    private Long id;
     private String roomId;
-    private String senderId;
-    private String receiverId;
+
+    private Long senderId;
+    private Long receiverId;
     private String content;
 
     private Date timeStamp;

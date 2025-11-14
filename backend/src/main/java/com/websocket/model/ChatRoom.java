@@ -1,4 +1,4 @@
-package com.websocket.chatroom;
+package com.websocket.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,12 +9,12 @@ import lombok.Data;
 @Data
 @Entity
 @Builder
-@Table(name = "chatroom")
+@Table(name = "chatrooms")
 public class ChatRoom {
     @Id
-    private String id;
+    private Long id;
     private String roomId;
     private String roomName;
-    private String senderId;
-    private String receiverId;
+    private Long senderId;
+    private Long receiverId;
 }

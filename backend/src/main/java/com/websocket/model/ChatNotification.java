@@ -1,4 +1,4 @@
-package com.websocket.chat;
+package com.websocket.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,8 +12,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class ChatNotification {
-    private String id;
-    private String senderId;
-    private String receiverId;
+    private Long id;
+    private Long senderId;
+    private Long receiverId;
     private String content;
 }

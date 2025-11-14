@@ -4,14 +4,23 @@
 
 - Docker Desktop installed and running
 - Docker Compose installed
+- Maven Installed (maven clean install)
+- PostgresDB Installed
+
+## Steps to Build
+1. Compile Project into Jar
+```mvn clean package```
+2. Build Docker Image
+```docker build -t chat-app .```
 
 ## Steps to Run
 
-1. Start the database:
+1. Start the database & application:
 
 ```bash
 cd backend
 docker compose up -d
+
 ```
 
 2. Check the logs to ensure successful initialization:
@@ -23,15 +32,15 @@ docker compose logs db
 3. Connect to database (optional, for troubleshooting):
 
 ```bash
-docker compose exec db psql -U andre -d chatdb
+docker compose exec db psql -U postgres -d chatdb
 ```
 
 ## Database Details
 
-- **Host**: localhost
+- **Host**: postgres
 - **Port**: 5432
 - **Database**: chatdb
-- **Username**: andre
+- **Username**: postgres
 - **Password**: pass
 
 ## Common Commands

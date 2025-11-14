@@ -1,15 +1,30 @@
+version: "3.8"
 services:
-  db:
+#  chat-app: docker image for app, uncomment when build ready
+
+#    image: chat-app:latest
+#    container_name: chat-app
+#    ports:
+#      - "8080:8080"
+#    env_file:
+#      - .env
+
+
+  postgres:
     image: postgres:16
+    container_name: postgres
     restart: always
+
     environment:
-      POSTGRES_USER: andre
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: pass
       POSTGRES_DB: chatdb
+
     ports:
-      - 5432:5432
+      - "5432:5432"
+
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
 
 volumes:
-  db_data:
+  pgdata:

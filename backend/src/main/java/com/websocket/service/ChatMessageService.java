@@ -1,11 +1,11 @@
-package com.websocket.chat;
+package com.websocket.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.websocket.repository.ChatMessageRepository;
+import com.websocket.model.ChatMessage;
 import org.springframework.stereotype.Service;
-
-import com.websocket.chatroom.ChatRoomService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +27,7 @@ public class ChatMessageService {
         return message;
     }
 
-    public List<ChatMessage> findChatMessages(String senderId, String receiverId) {
+    public List<ChatMessage> findChatMessages(Long senderId, Long receiverId) {
         // First, obtain the roomId for the chat between sender & receiver (no need to create a room here)
         var roomId = service.getChatRoomId(senderId, receiverId, false);
 

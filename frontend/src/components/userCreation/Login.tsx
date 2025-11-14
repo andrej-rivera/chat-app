@@ -9,13 +9,23 @@ import {
 import { Button } from "../ui/button";
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
+import { useState } from "react";
 
 interface loginProps {
   className: string;
   setActiveTab: React.Dispatch<React.SetStateAction<"login" | "signup">>;
 }
 
+// main page for logging into
+
 function Login({ className, setActiveTab }: loginProps) {
+  const [userEmail, setUserEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+
+  const loginAccount = () => {
+    // Logic for logging in the user goes here
+  };
+
   return (
     <>
       <div className={cn("flex flex-col gap-6", className)}>
@@ -36,6 +46,7 @@ function Login({ className, setActiveTab }: loginProps) {
                     type="email"
                     placeholder="abc@example.com"
                     required
+                    onChange={(e) => setUserEmail(e.target.value)}
                   />
                 </Field>
                 <Field>
@@ -45,6 +56,7 @@ function Login({ className, setActiveTab }: loginProps) {
                     type="password"
                     placeholder="password"
                     required
+                    onChange={(e) => setUserPassword(e.target.value)}
                   />
                 </Field>
                 <Field>

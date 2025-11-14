@@ -2,14 +2,38 @@ spring:
   application:
     name: chat
 
-  data:
-    db:
-      username: andre
-      password: pass
-      host: localhost
-      port: 27017
-      database: chatdb
-      authentication-database: admin
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET_KEY}
+      expiration-time: 36000000
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${SUPPORT_EMAIL}
+    password: ${APP_PASSWORD}
+
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 
   server:
-    port: 5432
+    port: 8080
