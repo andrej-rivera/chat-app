@@ -1,13 +1,12 @@
-version: "3.8"
 services:
-#  chat-app: docker image for app, uncomment when build ready
+  chat-app:
 
-#    image: chat-app:latest
-#    container_name: chat-app
-#    ports:
-#      - "8080:8080"
-#    env_file:
-#      - .env
+    image: chat-app:latest
+    container_name: chat-app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
 
 
   postgres:
